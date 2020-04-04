@@ -1,19 +1,29 @@
-#include <string.h>
+#include <string>
 #include <iostream>
 #include "FamilyTree.hpp"
 
 namespace family
 {
-class Tree
+
+Tree &Tree::addFather(string child, string dad)
 {
-    private:
-    string name;
-
-public:
-Tree(string n){
-name =n;
+}
+Tree &Tree::addMother(string child, string mom)
+{
+}
+string Tree::relation(string)
+{
+    return "";
+}
+string Tree::find(string)
+{
+    return "";
+}
+void Tree::remove(string)
+{
+}
+void Tree::display()
+{
 }
 
-
-}
 } // namespace family
