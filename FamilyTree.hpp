@@ -25,5 +25,6 @@ public:
     string find(string);
     void display();
     void remove(string);
+    Tree search(Tree *T, string name);
 };
 } // namespace family
