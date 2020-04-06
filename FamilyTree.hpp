@@ -1,22 +1,33 @@
 #include <string>
+#include <string.h>
 
 using namespace std;
 
 namespace family
 {
-class Tree
+class Node
 {
-private:
-    string name;
-    Tree *mom;
-    Tree *dad;
-
 public:
-    Tree(string n)
+    string name;
+    Node *mom;
+    Node *dad;
+
+    Node(string n)
     {
         name = n;
         mom = nullptr;
         dad = nullptr;
+    }
+};
+
+class Tree
+{
+public:
+    Node *root;
+
+    Tree(string n)
+    {
+        root = new Node(n);
     }
 
     Tree &addFather(string, string);
@@ -25,6 +36,6 @@ public:
     string find(string);
     void display();
     void remove(string);
-    Tree search(Tree *T, string name);
+    Node *search(Node *root, string name);
 };
 } // namespace family
