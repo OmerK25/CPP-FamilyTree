@@ -1,3 +1,10 @@
+/*
+ *AUTHOR: Omer Katz & Raafat Marzuq
+ *
+ * Date: 2020-04
+ *
+ */
+
 #include <string>
 #include <iostream>
 #include "FamilyTree.hpp"
@@ -6,9 +13,6 @@ using namespace family;
 
 Node *Tree::search(Node *root, string name)
 {
-    cout << root->name + " is the root" << endl;
-    cout << "we are looking for  : " + name << endl;
-
     if (root->name.compare(name) == 0)
     {
         return root;
@@ -20,7 +24,7 @@ Node *Tree::search(Node *root, string name)
         if (ans != nullptr)
             return ans;
     }
-    
+
     if (root->dad != nullptr)
     {
         Node *ans = search(root->dad, name);
