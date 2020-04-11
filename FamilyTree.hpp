@@ -18,6 +18,11 @@ public:
         mom = nullptr;
         dad = nullptr;
     }
+      ~Node(){
+        if(mom != nullptr) delete mom;
+        if(dad != nullptr) delete dad;
+    }
+
 };
 
 class Tree
@@ -29,7 +34,7 @@ public:
     {
         root = new Node(n);
     }
-
+  
     Tree &addFather(string, string);
     Tree &addMother(string, string);
     string relation(string);
