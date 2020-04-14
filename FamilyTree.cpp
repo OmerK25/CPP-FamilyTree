@@ -37,12 +37,12 @@ Node *Tree::search(Node *root, string name)
 
 Tree &Tree::addFather(string child, string dad)
 {
-    Node *ptr = search(this->root, child);
-    if (ptr != nullptr)
+    Node *temp = search(this->root, child);
+    if (temp != nullptr)
     {
-        if (ptr->dad == nullptr)
+        if (temp->dad == nullptr)
         {
-            ptr->dad = new Node(dad);
+            temp->dad = new Node(dad);
 
             return *this;
         }
@@ -56,12 +56,12 @@ Tree &Tree::addFather(string child, string dad)
 
 Tree &Tree::addMother(string child, string mom)
 {
-    Node *ptr = search(this->root, child);
-    if (ptr != nullptr)
+    Node *temp = search(this->root, child);
+    if (temp != nullptr)
     {
-        if (ptr->mom == nullptr)
+        if (temp->mom == nullptr)
         {
-            ptr->mom = new Node(mom);
+            temp->mom = new Node(mom);
 
             return *this;
         }
@@ -73,10 +73,51 @@ Tree &Tree::addMother(string child, string mom)
     return *this;
 }
 
-string Tree::relation(string)
+string Tree::relation(string relative)
 {
+    Node *temp = Tree::root;
+    string ans="";
+    if(temp->mom != nullptr)
+        ans= chick_mom(temp,relative);
+    else if((temp->dad != nullptr) && (ans.compare("")==1))
+        return chick_dad(temp,relative);
+    else
+    {
+        return "unrelated" ;
+    }
+    
+    }
+string Tree::chick_dad(Node *root,string relative)
+{
+      root = root->dad;
+
+    while(root !=nullptr)
+    {
+        if( root->name.compare(relative )==0 )
+            return "grand";
+        else if(root->mom!= nullptr)
+            return chick_mom(root,relative);
+        else
+            root = root->dad;
+    }
+    return "father";
+}
+string Tree::chick_mom(Node *root,string relative)
+{
+    root=root->mom;
+    
+      while(root!=NULL)
+    {
+        if(root->name.compare(relative) == 0)
+            return "grand";
+        else if (root)
+            return chick_dad(root,relative);
+        else
+            root= root->mom;
+    }
     return "";
 }
+
 string Tree::find(string)
 {
     return "";
