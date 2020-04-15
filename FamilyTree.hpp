@@ -42,7 +42,7 @@ public:
     void display();
     void remove(string);
     Node *search(Node *root, string name);
-    string chick_dad(Node *root, string name);
-    string chick_mom(Node *root,string name);
+    string chick_dad(Node *root, string name,string *relation);
+    string chick_mom(Node *root,string name, string *relation);
 };
 } // namespace family
