@@ -102,11 +102,11 @@ string Tree::relation(string relative)
 
         }
        
-     if(temp->dad != nullptr)
-    {   
-     (*ans) = "";
+        if(temp->dad != nullptr)
+        {   
+        (*ans) = "";
        (*ans)=chick_dad(temp,relative,ans);
-    }
+        }
     else 
     {
         return "unrelated" ;
@@ -122,7 +122,7 @@ string Tree::chick_dad(Node *root,string relative,string *ans)
     {
 
      if( root->name.compare(relative )==0 )
-     {
+        {
          return (*ans)+ "grandfather ";
           }
        else 
