@@ -75,103 +75,93 @@ Tree &Tree::addMother(string child, string mom)
 
 string Tree::relation(string relative)
 {
-    // Node *temp = Tree::root;
-    // string *ans ;
-    // (*ans)="";
-    // cout<< "temp is :" + temp->name<< endl;
-    // cout<< "relative is :" + relative << endl;
-    // if(temp->name.compare(relative)== 0) 
+    Node *temp = Tree::root;
+    string *ans ;
+    (*ans)="";
+    cout<< "temp is :" + temp->name<< endl;
+    cout<< "relative is :" + relative << endl;
+    if(temp->name.compare(relative)== 0) 
 {
-    // return "That's me ";
+    return "That's me ";
 }
-    // else if(temp->dad->name.compare(relative)== 0) 
-    // {
-    //    
-        // return "father";
-    // }
-//    else if(temp->mom->name.compare(relative)== 0) 
-    // {
-        // return "mother";
-    // }
-    // else
-    // {    
-        // if(temp->mom != nullptr)
-        // {
-        // (*ans) =chick_mom(temp,relative,ans);
-                // cout<< " THE REL IS : " + (*ans) <<endl;
+    else if(temp->dad->name.compare(relative)== 0) 
+    {
+       
+        return "father";
+    }
+   else if(temp->mom->name.compare(relative)== 0) 
+    {
+        return "mother";
+    }
+    else
+    {           
+        if(temp->dad != nullptr)
+        {   
+        (*ans) = "";
+       (*ans)=chick_dad(temp,relative,ans);
+        }
+    }
+     return (*ans);
+      }
+string Tree::chick_dad(Node *root,string relative,string *ans)
+{
+      Node *temp = root->dad;
+  
+    while(temp !=nullptr)
+    {
 
-        // }
-    //    
-        // if(temp->dad != nullptr)
-        // {   
-        // (*ans) = "";
-    //    (*ans)=chick_dad(temp,relative,ans);
-        // }
-    // else 
-    // {
-        // return "unrelated" ;
-    // }
-    // }
-     return "";
-     }
-// string Tree::chick_dad(Node *root,string relative,string *ans)
-// {
-    //   root = root->dad->dad;
-//   
-    // while(root !=nullptr)
-    // {
+     if( temp->name.compare(relative )==0 )
+        {
+         return (*ans)+ "grandfather ";
+          }
+     else if(temp->mom != nullptr)
+        {
+            if(temp->mom->name.compare(relative) == 0)
+            {
+                return (*ans) + "grandmother";
+            }
+        }
+       else 
+            { 
+           (*ans) += "great-";
+            }
+             
+            temp = temp->dad;
 
-    //  if( root->name.compare(relative )==0 )
-        // {
-        //  return (*ans)+ "grandfather ";
-        //   }
-    //    else 
-            // { 
-        //    (*ans) += "great-";
-        //    
-        //  if(root->mom!= nullptr)
-        //    {
+    }
+        
+        
+    return "unrelated";
+}
+string Tree::chick_mom(Node *root,string relative,string *ans)
+{
+          Node *temp = root->mom;
+  
+    while(temp !=nullptr)
+    {
 
-            // (*ans)= chick_mom(root,relative,ans);
-        //    }
-            // }
-            // root = root->dad;
+     if( temp->name.compare(relative )==0 )
+        {
+         return (*ans)+ "grandfather ";
+          }
+     else if(temp->mom != nullptr)
+        {
+            if(temp->mom->name.compare(relative) == 0)
+            {
+                return (*ans) + "grandmother";
+            }
+        }
+       else 
+            { 
+           (*ans) += "great-";
+            }
+             
+            temp = temp->dad;
 
-    // }
-
-    // return (*ans);
-// }
-// string Tree::chick_mom(Node *root,string relative,string *ans)
-// {
-    // root=root->mom;
-    //   while(root->mom != nullptr )
-    // {
-    //   if(root->name.compare(relative) == 0)
-    //  {
-        //  printf("\n1\n");
-        // return  (*ans) + "grandmother ";
-
-    //  }
-    //    else
-        //  {  
-            //  (*ans) += "great-";
-            // 
-    // if (root->dad != nullptr)
-        //  {
-        //    (*ans)= chick_dad(root,relative,ans);
-        //  }
-        //  }
-            // root= root->mom;
-    // }
-
-    // if(root->name.compare(relative) == 0)
-//  {
-    //  printf("\n2\n");
-    // return  "grandmother ";
-//  }
-    // 
-    // return *(ans);
-// }
+    }
+        
+    return "unrelated";
+}
 
 string Tree::find(string)
 {
