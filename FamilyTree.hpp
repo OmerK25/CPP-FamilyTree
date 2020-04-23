@@ -43,8 +43,11 @@ public:
     void display();
     void remove(string);
     Node *search(Node *root, string name);
-    string chick_dad(Node *root, string name,string *relation);
-    string chick_mom(Node *root,string name, string *relation);
+    string findDad(Node *root, string name,string *relation);
+    string findMom(Node *root,string name, string *relation);
     string get_name(string r,Node * root);
+    Node *leafDelete(struct Node* root);
+    bool ifNodeExists( Node* node, string key); 
+     
 };
 } // namespace family

@@ -75,11 +75,9 @@ Tree &Tree::addMother(string child, string mom)
 
 string Tree::relation(string relative)
 {
-    Node *temp = Tree::root;
+    Node *temp = this->root;
     string *ans ;
     (*ans)="";
-    cout<< "temp is :" + temp->name<< endl;
-    cout<< "relative is :" + relative << endl;
     if(temp->name.compare(relative)== 0) 
 {
     return "That's me ";
@@ -98,12 +96,12 @@ string Tree::relation(string relative)
         if(temp->dad != nullptr)
         {   
         (*ans) = "";
-       (*ans)=chick_dad(temp,relative,ans);
+       (*ans)=findDad(temp,relative,ans);
         }
     }
      return (*ans);
       }
-string Tree::chick_dad(Node *root,string relative,string *ans)
+string Tree::findDad(Node *root,string relative,string *ans)
 {
       Node *temp = root->dad;
   
@@ -133,7 +131,7 @@ string Tree::chick_dad(Node *root,string relative,string *ans)
         
     return "unrelated";
 }
-string Tree::chick_mom(Node *root,string relative,string *ans)
+string Tree::findMom(Node *root,string relative,string *ans)
 {
           Node *temp = root->mom;
   
@@ -187,7 +185,7 @@ string Tree::find(string relation)
         }
         catch(const std::exception& e)
         {
-            std::cerr << e.what() << '\n';
+           throw runtime_error( "This function can't give you the "+ relation +"'s name")  ;
         }
     }
     
@@ -195,8 +193,6 @@ string Tree::find(string relation)
 }
 string  Tree::get_name(string relation,Node *node)
 {   
-    cout << " in get_name" << endl ;
-    cout<< relation<< endl ;
 
     if(relation.compare("grandfather") ==0)
     {
@@ -222,9 +218,56 @@ string  Tree::get_name(string relation,Node *node)
     }
     return "";
 }
-void Tree::remove(string)
-{
+void Tree::remove(string relative)
+{   
+    Node *temp = this->root;
+    bool flag =ifNodeExists(temp,relative);
+    if(flag){
+        Node* _node = search(root,relative);
+           cout<< "YOU ARE SEARCHING FOR : " + _node->name << endl;
+        Node* deleted_node=leafDelete(_node);
+           cout<< "YOU DELETED : " + deleted_node->name << endl;
+    }
+    else
+    {
+       throw runtime_error(relative + " is not one of the family");
+    }
+    
+
 }
+ Node*  Tree::leafDelete( Node* root) 
+{ 
+    if (root == NULL) 
+        return NULL; 
+    if (root->mom == NULL && root->dad == NULL) { 
+        free(root); 
+        return NULL; 
+    }  
+    // Else recursively delete in left and right 
+    // subtrees. 
+    root->mom = leafDelete(root->mom); 
+    root->dad = leafDelete(root->dad); 
+  
+    return root; 
+} 
+bool Tree::ifNodeExists( Node* node, string key) 
+{ 
+    if (node == NULL) 
+        return false; 
+  
+    if (node->name == key) 
+        return true; 
+  
+    /* then recur on left sutree */
+    bool res1 = ifNodeExists(node->mom, key); 
+  
+    if(res1) return true; // node found, no need to look further 
+  
+    /* node is not found in left, so recur on right subtree */
+    bool res2 = ifNodeExists(node->dad, key); 
+  
+    return res2; 
+} 
 
 void print2D(Node *root, int space)
 {
