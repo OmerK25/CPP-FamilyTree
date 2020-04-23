@@ -11,7 +11,8 @@ public:
     string name;
     Node *mom;
     Node *dad;
-
+    string relation;
+    
     Node(string n)
     {
         name = n;
@@ -44,5 +45,6 @@ public:
     Node *search(Node *root, string name);
     string chick_dad(Node *root, string name,string *relation);
     string chick_mom(Node *root,string name, string *relation);
+    string get_name(string r,Node * root);
 };
 } // namespace family

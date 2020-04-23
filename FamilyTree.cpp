@@ -129,7 +129,7 @@ string Tree::chick_dad(Node *root,string relative,string *ans)
             temp = temp->dad;
 
     }
-        
+
         
     return "unrelated";
 }
@@ -163,8 +163,63 @@ string Tree::chick_mom(Node *root,string relative,string *ans)
     return "unrelated";
 }
 
-string Tree::find(string)
-{
+string Tree::find(string relation)
+{   
+    if(relation.compare("me")== 0)
+    {
+        return this->root->name;
+    }
+    else if(relation.compare("father") == 0)
+    {
+        return this->root->dad->name ;
+    }
+   else if( relation.compare("mother") == 0) 
+    {
+        return this->root->mom->name;
+    }
+    else 
+    {   
+        try
+        {   
+          
+              string _Rel = relation;
+    return get_name(_Rel,this->root );
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
+    
+    return "";
+}
+string  Tree::get_name(string relation,Node *node)
+{   
+    cout << " in get_name" << endl ;
+    cout<< relation<< endl ;
+
+    if(relation.compare("grandfather") ==0)
+    {
+        return node->dad->dad->name;
+    }
+    else if(relation.compare("grandmother") == 0)
+    {
+        if(node->dad->mom != nullptr)
+        {
+            return node->dad->mom->name;
+        }
+        if(node->mom->mom != nullptr)
+        {
+            return node->mom->mom->name;
+        }
+    }
+    else
+    {   
+
+        string temp ;
+        temp.append(relation.begin()+6,relation.end());
+        return get_name(temp,node->dad);
+    }
     return "";
 }
 void Tree::remove(string)
