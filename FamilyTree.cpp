@@ -43,13 +43,34 @@ Tree &Tree::addFather(string child, string dad)
         if (temp->dad == nullptr)
         {
             temp->dad = new Node(dad);
-
+            if (temp->relation == "me")
+                temp->dad->relation = "father";
+            else if (temp->relation == "father")
+                temp->dad->relation = "grandfather";
+            else if (temp->relation == "mother")
+                temp->dad->relation = "grandfather";
+            else if (temp->relation == "grandfather")
+                temp->dad->relation = "great-grandfather";
+            else if (temp->relation == "grandmother")
+                temp->dad->relation = "great-grandfather";
+            else
+            {
+                string t = "great-" + temp->relation;
+                for (int j = 0; j < 6; j++)
+                    t.pop_back();
+                t += "father";
+                temp->dad->relation = t;
+            }
             return *this;
         }
         else
         {
-            //cout << "got dad" << endl;
+            throw runtime_error("already have a father");
         }
+    }
+    else
+    {
+        throw runtime_error("the child is not in the tree");
     }
     return *this;
 }
@@ -62,212 +83,102 @@ Tree &Tree::addMother(string child, string mom)
         if (temp->mom == nullptr)
         {
             temp->mom = new Node(mom);
-
+            if (temp->relation == "me")
+                temp->mom->relation = "mother";
+            else if (temp->relation == "father")
+                temp->mom->relation = "grandmother";
+            else if (temp->relation == "mother")
+                temp->mom->relation = "grandmother";
+            else if (temp->relation == "grandfather")
+                temp->mom->relation = "great-grandmother";
+            else if (temp->relation == "grandmother")
+                temp->mom->relation = "great-grandmother";
+            else
+            {
+                string t = "great-" + temp->relation;
+                for (int j = 0; j < 6; j++)
+                    t.pop_back();
+                t += "mother";
+                temp->mom->relation = t;
+            }
             return *this;
         }
         else
         {
-            //cout << "got mom" << endl;
+            throw runtime_error("already have a mother");
         }
+    }
+    else
+    {
+        throw runtime_error("the child is not in the tree");
     }
     return *this;
 }
 
 string Tree::relation(string relative)
 {
-    Node *temp = this->root;
-    string *ans ;
-    (*ans)="";
-    if(temp->name.compare(relative)== 0) 
-{
-    return "That's me ";
-}
-    else if(temp->dad->name.compare(relative)== 0) 
-    {
-       
-        return "father";
-    }
-   else if(temp->mom->name.compare(relative)== 0) 
-    {
-        return "mother";
-    }
-    else
-    {           
-        if(temp->dad != nullptr)
-        {   
-        (*ans) = "";
-       (*ans)=findDad(temp,relative,ans);
-        }
-    }
-     return (*ans);
-      }
-string Tree::findDad(Node *root,string relative,string *ans)
-{
-      Node *temp = root->dad;
-  
-    while(temp !=nullptr)
-    {
+    Node *temp = search(this->root, relative);
+    if (temp != nullptr)
+        return temp->relation;
 
-     if( temp->name.compare(relative )==0 )
-        {
-         return (*ans)+ "grandfather ";
-          }
-     else if(temp->mom != nullptr)
-        {
-            if(temp->mom->name.compare(relative) == 0)
-            {
-                return (*ans) + "grandmother";
-            }
-        }
-       else 
-            { 
-           (*ans) += "great-";
-            }
-             
-            temp = temp->dad;
-
-    }
-
-        
-    return "unrelated";
-}
-string Tree::findMom(Node *root,string relative,string *ans)
-{
-          Node *temp = root->mom;
-  
-    while(temp !=nullptr)
-    {
-
-     if( temp->name.compare(relative )==0 )
-        {
-         return (*ans)+ "grandfather ";
-          }
-     else if(temp->mom != nullptr)
-        {
-            if(temp->mom->name.compare(relative) == 0)
-            {
-                return (*ans) + "grandmother";
-            }
-        }
-       else 
-            { 
-           (*ans) += "great-";
-            }
-             
-            temp = temp->dad;
-
-    }
-        
     return "unrelated";
 }
 
 string Tree::find(string relation)
-{   
-    if(relation.compare("me")== 0)
-    {
-        return this->root->name;
-    }
-    else if(relation.compare("father") == 0)
-    {
-        return this->root->dad->name ;
-    }
-   else if( relation.compare("mother") == 0) 
-    {
-        return this->root->mom->name;
-    }
-    else 
-    {   
-        try
-        {   
-          
-              string _Rel = relation;
-    return get_name(_Rel,this->root );
-        }
-        catch(const std::exception& e)
-        {
-           throw runtime_error( "This function can't give you the "+ relation +"'s name")  ;
-        }
-    }
-    
-    return "";
-}
-string  Tree::get_name(string relation,Node *node)
-{   
+{
+    Node *ptr = get_name(relation, this->root);
+    if (ptr != nullptr)
+        return ptr->name;
 
-    if(relation.compare("grandfather") ==0)
-    {
-        return node->dad->dad->name;
-    }
-    else if(relation.compare("grandmother") == 0)
-    {
-        if(node->dad->mom != nullptr)
-        {
-            return node->dad->mom->name;
-        }
-        if(node->mom->mom != nullptr)
-        {
-            return node->mom->mom->name;
-        }
-    }
-    else
-    {   
-
-        string temp ;
-        temp.append(relation.begin()+6,relation.end());
-        return get_name(temp,node->dad);
-    }
-    return "";
+    throw runtime_error("This function can't give you the " + relation + "'s name");
 }
-void Tree::remove(string relative)
-{   
+
+
+Node *Tree::get_name(string relation, Node *root)
+{
+    if (root->relation.compare(relation) == 0)
+    {
+        return root;
+    }
+
+    if (root->mom != nullptr)
+    {
+        Node *ptr = get_name(relation, root->mom);
+        if (ptr != nullptr)
+            return ptr;
+    }
+
+    if (root->dad != nullptr)
+    {
+        Node *ptr2 = get_name(relation, root->dad);
+        if (ptr2 != nullptr)
+            return ptr2;
+    }
+
+    return nullptr;
+}
+
+void Tree::remove(string relative) //" "
+{
     Node *temp = this->root;
-    bool flag =ifNodeExists(temp,relative);
-    if(flag){
-        Node* _node = search(root,relative);
-           cout<< "YOU ARE SEARCHING FOR : " + _node->name << endl;
-        Node* deleted_node=leafDelete(_node);
-           cout<< "YOU DELETED : " + deleted_node->name << endl;
+    Node *t = search(temp, relative);
+    if (t != nullptr)
+    {
+
+        if (t->relation == "me")
+            throw runtime_error("This function can't give you the " + relative + "'s name");
+
+        t=nullptr;
+        delete t;
+        // cout << "YOU ARE SEARCHING FOR : " + t->name << endl;
+        // leafDelete(t);
+        // cout << "YOU DELETED : " + t->name << endl;
     }
     else
     {
-       throw runtime_error(relative + " is not one of the family");
+        throw runtime_error(relative + " is not one of the family");
     }
-    
-
 }
- Node*  Tree::leafDelete( Node* root) 
-{ 
-    if (root == NULL) 
-        return NULL; 
-    if (root->mom == NULL && root->dad == NULL) { 
-        free(root); 
-        return NULL; 
-    }  
-    // Else recursively delete in left and right 
-    // subtrees. 
-    root->mom = leafDelete(root->mom); 
-    root->dad = leafDelete(root->dad); 
-  
-    return root; 
-} 
-bool Tree::ifNodeExists( Node* node, string key) 
-{ 
-    if (node == NULL) 
-        return false; 
-  
-    if (node->name == key) 
-        return true; 
-  
-    /* then recur on left sutree */
-    bool res1 = ifNodeExists(node->mom, key); 
-  
-    if(res1) return true; // node found, no need to look further 
-  
-    /* node is not found in left, so recur on right subtree */
-    bool res2 = ifNodeExists(node->dad, key); 
-  
-    return res2; 
-} 
 
 void print2D(Node *root, int space)
 {
