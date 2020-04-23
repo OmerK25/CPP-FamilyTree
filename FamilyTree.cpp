@@ -127,12 +127,11 @@ string Tree::relation(string relative)
 string Tree::find(string relation)
 {
     Node *ptr = get_name(relation, this->root);
-    if (ptr != nullptr)
+    if (!ptr)
+        throw runtime_error("This function can't give you the " + relation + "'s name");
+
         return ptr->name;
-
-    throw runtime_error("This function can't give you the " + relation + "'s name");
 }
-
 
 Node *Tree::get_name(string relation, Node *root)
 {
@@ -141,17 +140,17 @@ Node *Tree::get_name(string relation, Node *root)
         return root;
     }
 
-    if (root->mom != nullptr)
+    if (root->mom)
     {
         Node *ptr = get_name(relation, root->mom);
-        if (ptr != nullptr)
+        if (ptr)
             return ptr;
     }
 
-    if (root->dad != nullptr)
+    if (root->dad)
     {
         Node *ptr2 = get_name(relation, root->dad);
-        if (ptr2 != nullptr)
+        if (ptr2)
             return ptr2;
     }
 
@@ -162,20 +161,20 @@ void Tree::remove(string relative) //" "
 {
     Node *temp = this->root;
     Node *t = search(temp, relative);
-    if (t != nullptr)
+    if (t)
     {
 
         if (t->relation == "me")
             throw runtime_error("This function can't give you the " + relative + "'s name");
 
-        t=nullptr;
+        t->dad = nullptr;
+        t->mom = nullptr;
+        t = nullptr;
         delete t;
-        // cout << "YOU ARE SEARCHING FOR : " + t->name << endl;
-        // leafDelete(t);
-        // cout << "YOU DELETED : " + t->name << endl;
     }
     else
     {
+
         throw runtime_error(relative + " is not one of the family");
     }
 }

@@ -26,6 +26,8 @@ public:
             delete mom;
         if (dad != nullptr)
             delete dad;
+            name = nullptr;
+            relation = nullptr;
     }
 };
 
